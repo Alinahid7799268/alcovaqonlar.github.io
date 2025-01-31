@@ -2,47 +2,31 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Hacim Hesaplama</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagon Hacim Hesaplama</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Hacim Hesaplama</h1>
-    <form id="calcForm">
-        <label for="tip">Vagon Tipi:</label>
-        <input type="text" id="tip" name="tip" required><br><br>
-        
-        <label for="volume">Hacim (dm³):</label>
-        <input type="number" step="any" id="volume" name="volume" required><br><br>
-        
-        <button type="submit">Hesapla</button>
-    </form>
-
-    <h2>Sonuç:</h2>
-    <p id="result"></p>
-
-    <script>
-        document.getElementById('calcForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+    <div class="container">
+        <h1>Vagon Hacim Hesaplama</h1>
+        <form id="calculation-form">
+            <label for="tip">Vagon Tipi:</label>
+            <input type="text" id="tip" name="tip" placeholder="örn. '106' veya 'tip106'" required>
             
-            const tip = document.getElementById('tip').value;
-            const volume = document.getElementById('volume').value;
-
-            fetch('/calculate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `tip=${encodeURIComponent(tip)}&volume=${encodeURIComponent(volume)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('result').innerText = `Hata: ${data.error}`;
-                } else {
-                    document.getElementById('result').innerText = `Sonuç: ${data.result.toFixed(2)} cm`;
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
+            <label for="weight">Yükün Ağırlığı (kg):</label>
+            <input type="number" step="any" id="weight" name="weight" placeholder="örn. '5000'" required>
+            
+            <label for="density">Malzemenin Yoğunluğu (kg/dm³):</label>
+            <input type="number" step="any" id="density" name="density" placeholder="örn. '2.5'" required>
+            
+            <button type="submit" id="calculate-button">Hesapla</button>
+        </form>
+        <div id="result" class="hidden">
+            <h2>Sonuç:</h2>
+            <p>Hesaplanan Hacim: <span id="volume"></span> dm³</p>
+            <p>Sonuç (cm): <span id="result-cm"></span></p>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
